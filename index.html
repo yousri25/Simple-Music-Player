@@ -2,268 +2,171 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music Player</title>
-
-    <style>
-        body {
-            color: white;
-            font-family: 'Courier New', Courier, monospace;
-            font-style: italic;
-            font-size: larger;
-            margin: 0;
-            text-transform: capitalize;
-            transition: background 2s ease-in-out;
-        }
-
-        header {
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-        }
-
-        #album {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        #cover {
-            width: 200px;
-            height: 200px;
-            object-fit: cover;
-            display: block;
-            margin: auto;
-            transition-duration: 1s;
-            transition-delay: 0s;
-            transition-property: scale;
-        }
-
-        #cover:hover {
-            scale: 1.1;
-            box-shadow: 2px 2px 2px black;
-        }
-
-        button {
-            margin: 10px;
-            padding: 8px 15px;
-            transition-duration: 1s;
-            transition-delay: 0s;
-            transition-property: scale;
-        }
-
-        button:hover {
-            scale: 1.1;
-        }
-
-        table {
-            width: 80%;
-            margin: auto;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            border: 1px solid black;
-            padding: 10px;
-            text-align: center;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Player</title>
+<style>
+body {
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    font-style: italic;
+    font-size: larger;
+    margin: 0;
+    text-transform: capitalize;
+    transition: background 2s ease-in-out;
+}
+header {
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+}
+#album {
+    text-align: center;
+    margin-top: 20px;
+}
+#cover {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+    margin: auto;
+    transition-duration: 1s;
+    transition-delay: 0s;
+    transition-property: scale;
+}
+#cover:hover {
+    scale: 1.1;
+    box-shadow: 2px 2px 2px black;
+}
+button {
+    margin: 10px;
+    padding: 8px 15px;
+    transition-duration: 1s;
+    transition-delay: 0s;
+    transition-property: scale;
+}
+button:hover {
+    scale: 1.1;
+}
+table {
+    width: 80%;
+    margin: auto;
+    border-collapse: collapse;
+}
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+</style>
 </head>
 
 <body id="body">
 
-    <header>
-        <h1>Music Player</h1>
+<header>
+<h1>Music Player</h1>
+<div>
+<label>Search Songs By Name/Artist:</label>
+<input type="search" id="search" oninput="search()" placeholder="Title/Artist">
+</div>
+</header>
 
-        <div>
-            <label>Search Songs By Name/Artist:</label>
-            <input type="search" id="search" oninput="search()" placeholder="Title/Artist">
-        </div>
+<h2 style="text-align:center;">Player</h2>
 
-    </header>
+<div id="album">
+<img src="letithappen.jpg" id="cover" alt="Cover">
+<br>
+<audio src="letithappen.mp3" id="aud" controls hidden></audio>
+<br>
+<button onclick="prev()">Previous</button>
+<button id="pause" onclick="ppause()">Pause</button>
+<button onclick="next()">Next</button>
+</div>
 
-    <h2 style="text-align:center;">Player</h2>
+<hr>
 
-    <div id="album">
+<h2 style="text-align:center;">Search Result</h2>
 
-        <img src="letithappen.jpg" id="cover" alt="Cover">
+<table id="list">
+<tr>
+<th>Title</th>
+<th>Artist</th>
+</tr>
+</table>
 
-        <br>
+<script>
+let body = document.getElementById("body");
+let aud = document.getElementById("aud");
+let cover = document.getElementById("cover");
+let btn = document.getElementById("pause");
 
-        <audio src="letithappen.mp3" id="aud" controls hidden></audio>
+const songs = ["letithappen.mp3","the.mp3","love.mp3","lost.mp3","wish.mp3","myth.mp3","loversrock.mp3","freak.mp3","chanel.mp3","breath.mp3"];
+const covers = ["letithappen.jpg","letithappen.jpg","letithappen.jpg","lost.jpg","wish.png","myth.jpg","loversrock.jpg","freak.png","chanel.jpg","breath.jpg"];
+let titles = ["let it happen","the less i know","love paranoia","lost","wish","myth","lovers rock","freak","chanel","breath"];
+let artists = ["tame impala","tame impala","tame impala","frank ocean","beach house","beach house","tv girl","lana del rey","frank ocean","pink floyd"];
+let backgrounds = ["linear-gradient(135deg, #667eea, #764ba2)","linear-gradient(135deg, #ff9a9e, #fad0c4)","linear-gradient(135deg, #a18cd1, #fbc2eb)","linear-gradient(135deg, #f6d365, #fda085)","linear-gradient(135deg, #84fab0, #8fd3f4)","linear-gradient(135deg, #cfd9df, #e2ebf0)","linear-gradient(135deg, #ffecd2, #fcb69f)","linear-gradient(135deg, #ff758c, #ff7eb3)","linear-gradient(135deg, #43cea2, #185a9d)","linear-gradient(135deg, #30cfd0, #330867)"];
 
-        <br>
+let i = 0;
+aud.src = songs[i];
+cover.src = covers[i];
+body.style.background = backgrounds[i];
+aud.onended = next;
 
-        <button onclick="prev()">Previous</button>
-        <button id="pause" onclick="ppause()">Pause</button>
-        <button onclick="next()">Next</button>
+function prev() {
+    i--;
+    if(i < 0) i = songs.length - 1;
+    aud.src = songs[i];
+    cover.src = covers[i];
+    body.style.background = backgrounds[i];
+    aud.play();
+}
 
-    </div>
+function next() {
+    i++;
+    if(i >= songs.length) i = 0;
+    aud.src = songs[i];
+    cover.src = covers[i];
+    body.style.background = backgrounds[i];
+    aud.play();
+}
 
-    <hr>
+function ppause() {
+    if(aud.paused){
+        aud.play();
+        btn.textContent = "Pause";
+    } else {
+        aud.pause();
+        btn.textContent = "Play";
+    }
+}
 
-    <h2 style="text-align:center;">Search Result</h2>
-
-    <table id="list">
-
-        <tr>
-            <th>Title</th>
-            <th>Artist</th>
-        </tr>
-
-    </table>
-
-    <script>
-        let body = document.getElementById("body");
-        let aud = document.getElementById("aud");
-        let cover = document.getElementById("cover");
-        let btn = document.getElementById("pause");
-
-        const songs = [
-            "letithappen.mp3",
-            "the.mp3",
-            "love.mp3",
-            "lost.mp3",
-            "wish.mp3",
-            "myth.mp3",
-            "loversrock.mp3",
-            "freak.mp3",
-            "chanel.mp3",
-            "breath.mp3"
-        ];
-
-        const covers = [
-            "letithappen.jpg",
-            "letithappen.jpg",
-            "letithappen.jpg",
-            "lost.jpg",
-            "wish.png",
-            "myth.jpg",
-            "loversrock.jpg",
-            "freak.png",
-            "chanel.jpg",
-            "breath.jpg"
-        ];
-
-        let titles = [
-            "let it happen",
-            "the less i know",
-            "love paranoia",
-            "lost",
-            "wish",
-            "myth",
-            "lovers rock",
-            "freak",
-            "chanel",
-            "breath"
-        ];
-
-        let artists = [
-            "tame impala",
-            "tame impala",
-            "tame impala",
-            "frank ocean",
-            "beach house",
-            "beach house",
-            "tv girl",
-            "lana del rey",
-            "frank ocean",
-            "pink floyd"
-        ];
-
-        let backgrounds = [
-            "linear-gradient(135deg, #667eea, #764ba2)",
-            "linear-gradient(135deg, #ff9a9e, #fad0c4)",
-            "linear-gradient(135deg, #a18cd1, #fbc2eb)",
-            "linear-gradient(135deg, #f6d365, #fda085)",
-            "linear-gradient(135deg, #84fab0, #8fd3f4)",
-            "linear-gradient(135deg, #cfd9df, #e2ebf0)",
-            "linear-gradient(135deg, #ffecd2, #fcb69f)",
-            "linear-gradient(135deg, #ff758c, #ff7eb3)",
-            "linear-gradient(135deg, #43cea2, #185a9d)",
-            "linear-gradient(135deg, #30cfd0, #330867)"
-        ]
-
-        let i = 0;
-        aud.src = songs[i];
-        cover.src = covers[i];
-        body.style.background = backgrounds[i]
-        aud.onended = next;
-
-        function prev() {
-            i--;
-            if (i < 0) {
-                i = songs.length - 1;
-            }
-
-            aud.src = songs[i];
-            cover.src = covers[i];
-            body.style.background = backgrounds[i]
-            aud.play();
-
+function search() {
+    let ch = document.getElementById("search").value.toLowerCase();
+    let table = document.getElementById("list");
+    table.innerHTML = `
+    <tr>
+    <th>Title</th>
+    <th>Artist</th>
+    </tr>`;
+    for (let j = 0; j < titles.length; j++) {
+        if (include(ch, titles[j]) || include(ch, artists[j])) {
+            table.innerHTML += "<tr><td>" + titles[j] + "</td><td>" + artists[j] + "</td></tr>";
         }
+    }
+}
 
-        function next() {
-
-            i++;
-
-            if (i >= songs.length) {
-                i = 0;
-            }
-
-            aud.src = songs[i];
-            cover.src = covers[i];
-            body.style.background = backgrounds[i]
-            aud.play();
-
-        }
-
-        function ppause() {
-
-            if (aud.paused) {
-
-                aud.play();
-                btn.textContent = "Pause";
-
-            } else {
-
-                aud.pause();
-                btn.textContent = "Play";
-            }
-        }
-        function search() {
-            let ch = document.getElementById("search").value.toLowerCase();
-            let table = document.getElementById("list");
-            table.innerHTML = "
-                <tr>
-                <th>Title</th>
-                <th>Artist</th>
-                </tr>
-                ";
-            for (let j = 0; j <= titles.length - 1; j++) {
-                if (include(ch, titles[j]) || include(ch, artists[j])) {
-                    table.innerHTML += "<tr><td>" + titles[j] + "</td><td>" + artists[j] + "</td></tr>";
-                }
-            }
-        }
-        function include(ch1, ch2) {
-            if (ch1.length > ch2.length) {
-                return false;
-            }
-            for (let i = 0; i <= ch2.length - ch1.length; i++) {
-
-                if (ch2.substring(i, i + ch1.length) == ch1) {
-                    return true;
-                }
-
-            }
-            return false;
-        }
-    </script>
+function include(ch1, ch2){
+    ch1 = ch1.toLowerCase();
+    ch2 = ch2.toLowerCase();
+    if(ch1.length > ch2.length) return false;
+    for(let i=0;i<=ch2.length - ch1.length;i++){
+        if(ch2.substring(i,i+ch1.length) == ch1) return true;
+    }
+    return false;
+}
+</script>
 
 </body>
-
 </html>
