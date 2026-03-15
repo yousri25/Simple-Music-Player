@@ -237,12 +237,12 @@
         function search() {
             let ch = document.getElementById("search").value.toLowerCase();
             let table = document.getElementById("list");
-            table.innerHTML = `
+            table.innerHTML = "
                 <tr>
                 <th>Title</th>
                 <th>Artist</th>
                 </tr>
-                `;
+                ";
             for (let j = 0; j <= titles.length - 1; j++) {
                 if (include(ch, titles[j]) || include(ch, artists[j])) {
                     table.innerHTML += "<tr><td>" + titles[j] + "</td><td>" + artists[j] + "</td></tr>";
